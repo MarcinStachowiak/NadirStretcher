@@ -5,7 +5,6 @@ import numpy as np
 
 
 blur_thickness=5;
-gauss=1
 offset=8;
 blur_threshold=8
 show=False
@@ -38,27 +37,22 @@ for i, path in enumerate(jpg_files):
                 layer[(j-offset-blur_thickness):i_h,i,:]=img_min_resize
                 break
 
-    r,thresh = cv2.threshold(layer, 1, 1, cv2.THRESH_BINARY)
-    layer_gauss = cv2.GaussianBlur(layer, (gauss, gauss), 0)
-    layer_gauss=layer_gauss*thresh
-
-    result_img=img
     for i in range(0,i_w-1):
         for j in range(0,i_h):
-            if(np.any(np.array(layer_gauss[j,i,:])!=0)):
-                result_img[j:i_h,i,:]=layer_gauss[j:i_h,i,:]
+            if(np.any(np.array(layer[j,i,:])!=0)):
+                img[j:i_h,i,:]=layer[j:i_h,i,:]
                 break
 
     output_path=os.path.join(path_to_output_folder, file_name +"_blur"+ ".jpg")
-    cv2.imwrite(output_path, result_img, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
+    cv2.imwrite(output_path, img, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
 
     if show:
         cv2.namedWindow(file_name,cv2.WINDOW_NORMAL)
-        cv2.imshow(file_name,result_img)
+        cv2.imshow(file_name,img)
 
 if show:
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-print("_____________________")m
+print("_____________________")
 print("Zakończono z SUKCESEM")
